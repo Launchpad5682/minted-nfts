@@ -29,18 +29,20 @@ const GalleryView: FunctionComponent<GalleryViewProps> = (
   };
 
   return (
-    <div className="mx-auto grid max-w-fit grid-cols-1 flex-wrap gap-8 md:grid-cols-3 lg:grid-cols-4">
-      {listItems.map((listItem: Nft, _) => (
-        <Card
-          layoutId={String(_)}
-          key={_}
-          cardItem={listItem}
-          clickHandler={clickHandler}
-          setContext={(position: Position, nft: Nft) =>
-            setActiveContext({ position, nft })
-          }
-        />
-      ))}
+    <div className="flex h-full flex-col overflow-y-auto">
+      <div className="mx-auto grid max-w-fit grid-cols-1 flex-wrap gap-8 md:grid-cols-3 lg:grid-cols-4">
+        {listItems.map((listItem: Nft, _) => (
+          <Card
+            layoutId={String(_)}
+            key={_}
+            cardItem={listItem}
+            clickHandler={clickHandler}
+            setContext={(position: Position, nft: Nft) =>
+              setActiveContext({ position, nft })
+            }
+          />
+        ))}
+      </div>
       {selectedId && Number(selectedId) >= 0 && activeContext?.position && (
         <Modal
           layoutId={selectedId}
