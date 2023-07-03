@@ -14,6 +14,7 @@ const App = () => {
 
   const pageSize = 12;
   const [pageKey, setPageKey] = useState<string>();
+  const [nextPageKey, setNextPageKey] = useState<string>();
   const [nfts, setNfts] = useState<Array<Nft>>([]);
   const [loading, setLoading] = useState(false);
 
@@ -31,6 +32,10 @@ const App = () => {
           // console.log(data);
 
           setNfts((prev: Array<Nft>) => [...prev, ...data.nfts]);
+          console.log(pageKey, "using this key");
+          setNextPageKey(data.pageKey);
+          console.log(data.pageKey, "returned key");
+          setPageKey(undefined);
           setLoading(false);
         } catch (error) {
           console.log(error);
@@ -49,8 +54,26 @@ const App = () => {
       <div className={`${isConnected ? "ml-auto" : ""}`}>
         <ConnectButton />
       </div>
-      {isConnected && !loading ? <GalleryView listItems={nfts} /> : null}
-      <Loader visible={loading} absolute />
+      {isConnected && !loading ? (
+        <GalleryView
+          listItems={nfts}
+          loadMoreItems={() => {
+            setPageKey(nextPageKey);
+            console.log(nextPageKey, "load more details");
+          }}
+          loadingMore={loading && pageKey}
+          isItemLoaded={(index: number): boolean => {
+            // const bool = index < nfts.length || !Boolean(nextPageKey);
+            // console.log(bool, index, nfts.length, "items loaded");
+            // return bool;
+
+            const bool = !!nfts[index];
+
+            return bool;
+          }}
+        />
+      ) : null}
+      <Loader visible={loading && !pageKey} absolute />
     </div>
   );
 };
