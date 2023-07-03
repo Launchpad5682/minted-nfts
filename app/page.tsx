@@ -18,25 +18,27 @@ const App = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const data = await getAllNFTs(
-          "0xFe88444bf2dd671cdfC2FDab8c6642df3d2E3970",
-          pageSize,
-          pageKey
-        );
+    if (isConnected) {
+      (async () => {
+        try {
+          setLoading(true);
+          const data = await getAllNFTs(
+            "0xFe88444bf2dd671cdfC2FDab8c6642df3d2E3970",
+            pageSize,
+            pageKey
+          );
 
-        // console.log(data);
+          // console.log(data);
 
-        setNfts(data.nfts);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    })();
-  }, [pageKey]);
+          setNfts(data.nfts);
+          setLoading(false);
+        } catch (error) {
+          console.log(error);
+          setLoading(false);
+        }
+      })();
+    }
+  }, [pageKey, isConnected]);
 
   return (
     <div
