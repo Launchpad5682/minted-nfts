@@ -14,7 +14,7 @@ const App = () => {
 
   const pageSize = 12;
   const [pageKey, setPageKey] = useState<string>();
-  const [nfts, setNfts] = useState<Array<Nft>>();
+  const [nfts, setNfts] = useState<Array<Nft>>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const App = () => {
 
           // console.log(data);
 
-          setNfts(data.nfts);
+          setNfts((prev: Array<Nft>) => [...prev, ...data.nfts]);
           setLoading(false);
         } catch (error) {
           console.log(error);
@@ -42,7 +42,7 @@ const App = () => {
 
   return (
     <div
-      className={`flex h-full min-h-screen w-full flex-col bg-gray-950 ${
+      className={`flex h-screen min-h-screen w-full flex-col bg-gray-950 ${
         isConnected ? "gap-8" : "items-center justify-center"
       } p-8`}
     >
