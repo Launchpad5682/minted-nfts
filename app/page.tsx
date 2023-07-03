@@ -18,7 +18,7 @@ const App = () => {
   const { isConnected } = useAccount();
 
   const pageSize = 100;
-  const [pageKeys, setPageKeys] = useState<[]>([]);
+  const [pageKeys, setPageKeys] = useState<Array<string>>([]);
   const [activePage, setActivePage] = useState(-1);
   const [nfts, setNfts] = useState<Array<Nft>>();
   const [loading, setLoading] = useState(false);
