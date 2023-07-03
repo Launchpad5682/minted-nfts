@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useRef, useState } from "react";
 
 // components
 import { Card } from "../card";
@@ -9,6 +9,9 @@ import { Position } from "../modal/types";
 import { Nft } from "alchemy-sdk";
 import { GalleryViewProps } from "./types";
 import { NftDetails } from "../nft-details";
+
+import { FixedSizeGrid as Grid } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 
 const GalleryView: FunctionComponent<GalleryViewProps> = (
   props: GalleryViewProps
@@ -23,24 +26,71 @@ const GalleryView: FunctionComponent<GalleryViewProps> = (
     nft: Nft;
   }>();
 
+  const gridRef = useRef(null);
+
+  const columnCount = 4;
+
   const clickHandler = (id: string) => {
     setModal(true);
     setSelectedId(id);
   };
 
-  return (
-    <div className="mx-auto grid max-w-fit grid-cols-1 flex-wrap gap-8 md:grid-cols-3 lg:grid-cols-4">
-      {listItems.map((listItem: Nft, _) => (
+  const card = ({ columnIndex, rowIndex, style }) => {
+    const index = rowIndex * columnCount + columnIndex;
+
+    if (index >= listItems.length) {
+      return null; // Return null if index is out of bounds
+    }
+
+    return (
+      <div style={style}>
         <Card
-          layoutId={String(_)}
-          key={_}
-          cardItem={listItem}
+          layoutId={String(index)}
+          key={listItems[index].tokenId}
+          cardItem={listItems[index]}
           clickHandler={clickHandler}
           setContext={(position: Position, nft: Nft) =>
             setActiveContext({ position, nft })
           }
         />
-      ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex h-full max-h-full w-full overflow-y-auto">
+      <AutoSizer>
+        {({ height, width }) => {
+          console.log(height, width, "hw");
+          const columnWidth = Math.ceil(width / 4);
+          return (
+            <Grid
+              columnCount={columnCount}
+              rowCount={Math.ceil(listItems.length / columnCount)}
+              columnWidth={columnWidth}
+              rowHeight={300}
+              height={height}
+              width={width}
+              onScroll={(e) => {
+                if (gridRef.current) {
+                  const { scrollTop, scrollHeight, clientHeight } =
+                    gridRef.current;
+                  const isAtEnd = scrollTop + clientHeight === scrollHeight;
+
+                  if (isAtEnd) {
+                    // Grid has reached the end
+                    console.log("Reached end of grid");
+                  }
+                }
+              }}
+              ref={gridRef}
+            >
+              {card}
+            </Grid>
+          );
+        }}
+      </AutoSizer>
+
       {selectedId && Number(selectedId) >= 0 && activeContext?.position && (
         <Modal
           layoutId={selectedId}
