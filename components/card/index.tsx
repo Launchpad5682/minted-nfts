@@ -14,7 +14,7 @@ const colors = [
 ];
 
 const Card: FunctionComponent<CardProps> = (props: CardProps) => {
-  const { cardItem, clickHandler, layoutId, setPosition } = props;
+  const { cardItem, clickHandler, layoutId, setContext } = props;
 
   const {
     rawMetadata = {},
@@ -39,7 +39,7 @@ const Card: FunctionComponent<CardProps> = (props: CardProps) => {
         top: rect.top + window.pageYOffset,
         left: rect.left + window.pageXOffset,
       };
-      setPosition(fixedPosition);
+      setContext(fixedPosition, cardItem);
     }
 
     clickHandler(layoutId);

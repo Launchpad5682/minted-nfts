@@ -5,5 +5,5 @@ interface CardProps {
   cardItem: Nft;
   layoutId: string;
   clickHandler: (id: string) => void;
-  setPosition: (position: Position) => void;
+  setContext: (position: Position, nft: Nft) => void;
 }
