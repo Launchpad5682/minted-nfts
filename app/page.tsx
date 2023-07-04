@@ -24,6 +24,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [fetchNfts, setFetchNfts] = useState(true);
 
+  console.log(activePage, pageKeys, pageKeys.length, "pagekeys");
   useEffect(() => {
     if (isConnected && fetchNfts) {
       (async () => {
@@ -39,7 +40,9 @@ const App = () => {
 
           setNfts(data.nfts);
           setPageKeys((prev) =>
-            data.pageKey ? [...prev, data.pageKey] : prev
+            data.pageKey && !prev.includes(data.pageKey)
+              ? [...prev, data.pageKey]
+              : prev
           );
           setFetchNfts(false);
           setLoading(false);
