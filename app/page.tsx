@@ -24,7 +24,6 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [fetchNfts, setFetchNfts] = useState(true);
 
-  console.log(activePage, pageKeys, pageKeys.length, "pagekeys");
   useEffect(() => {
     if (isConnected && fetchNfts) {
       (async () => {
