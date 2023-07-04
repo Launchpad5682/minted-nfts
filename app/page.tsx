@@ -65,31 +65,35 @@ const App = () => {
       <div
         className={`${isConnected ? "ml-auto flex items-center gap-8" : ""}`}
       >
-        {!loading ? <p>Showing {nfts?.length ?? 0} nfts</p> : null}
-        <button
-          className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-800 p-4 ${
-            !disabledPrev ? "hover:bg-gray-700" : ""
-          }`}
-          onClick={() => {
-            setActivePage((prev) => prev - 1);
-            setFetchNfts(true);
-          }}
-          disabled={disabledPrev}
-        >
-          <Icon icon={ic_keyboard_arrow_left} size={24} />
-        </button>
-        <button
-          className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-800 p-4 ${
-            !disabledNext ? "hover:bg-gray-700" : ""
-          }`}
-          onClick={() => {
-            setActivePage((prev) => prev + 1);
-            setFetchNfts(true);
-          }}
-          disabled={disabledNext}
-        >
-          <Icon icon={ic_keyboard_arrow_right} size={24} />
-        </button>
+        {isConnected ? (
+          <>
+            {!loading ? <p>Showing {nfts?.length ?? 0} nfts</p> : null}
+            <button
+              className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-800 p-4 ${
+                !disabledPrev ? "hover:bg-gray-700" : ""
+              }`}
+              onClick={() => {
+                setActivePage((prev) => prev - 1);
+                setFetchNfts(true);
+              }}
+              disabled={disabledPrev}
+            >
+              <Icon icon={ic_keyboard_arrow_left} size={24} />
+            </button>
+            <button
+              className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-gray-800 p-4 ${
+                !disabledNext ? "hover:bg-gray-700" : ""
+              }`}
+              onClick={() => {
+                setActivePage((prev) => prev + 1);
+                setFetchNfts(true);
+              }}
+              disabled={disabledNext}
+            >
+              <Icon icon={ic_keyboard_arrow_right} size={24} />
+            </button>
+          </>
+        ) : null}
         <ConnectButton />
       </div>
       {isConnected && !loading ? <GalleryView listItems={nfts} /> : null}
